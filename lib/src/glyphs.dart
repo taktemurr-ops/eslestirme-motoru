@@ -1,4 +1,6 @@
 import 'dart:math' as math;
+import 'dart:ui' as ui;
+
 import 'package:flutter/material.dart';
 
 import 'core.dart';
@@ -294,17 +296,17 @@ void drawTile(Canvas c, Rect r, int face, MPalette p,
   }
 }
 
-/// Küçük yazı (ParagraphBuilder ile, widget katmanına bağlı değil).
+/// Küçük yazı (ui.ParagraphBuilder ile, widget katmanına bağlı değil).
 _Label _label(String text, double size, Color color) => _Label(text, size, color);
 
 class _Label {
-  final Paragraph para;
+  final ui.Paragraph para;
   _Label(String text, double size, Color color)
-      : para = (ParagraphBuilder(ParagraphStyle(fontSize: size, fontWeight: FontWeight.w700))
-              ..pushStyle(TextStyle(color: color, fontSize: size, fontWeight: FontWeight.w700))
+      : para = (ui.ParagraphBuilder(ui.ParagraphStyle(fontSize: size, fontWeight: FontWeight.w700))
+              ..pushStyle(ui.TextStyle(color: color, fontSize: size, fontWeight: FontWeight.w700))
               ..addText(text))
             .build()
-          ..layout(const ParagraphConstraints(width: 400));
+          ..layout(const ui.ParagraphConstraints(width: 400));
   void paint(Canvas c, Offset o) => c.drawParagraph(para, o);
 }
 
