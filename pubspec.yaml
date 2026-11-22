@@ -1,0 +1,20 @@
+name: eslestirme_motoru
+description: "Eşleştirme ailesinin ortak motoru: sıra tabanlı ve gerçek zamanlı eşleştirme oyunları, bölüm üretimi, doğrulama ve ortak ekran."
+publish_to: none
+version: 1.0.0
+
+environment:
+  sdk: ">=3.6.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  studio_core:
+    git:
+      url: https://github.com/taktemurr-ops/studio-core
+      ref: 20b9a914f84c092c52ed8e5afddb56c0dcf3eca6
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
