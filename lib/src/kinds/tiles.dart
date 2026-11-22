@@ -239,7 +239,7 @@ class PairTilesKind extends MatchKind {
         'y': [for (final p in pos) p.y],
         'z': [for (final p in pos) p.z],
         'f': face,
-        'o': [for (final g in order.reversed) ...g],
+        'o': [for (final g in order) ...g],
       });
     }
     throw StateError('layout');
@@ -560,7 +560,7 @@ class TrayKind extends MatchKind {
         'y': [for (final p in pos) p.y],
         'z': [for (final p in pos) p.z],
         'f': face,
-        'o': [for (final g in order.reversed) ...g],
+        'o': [for (final g in order) ...g],
         'pile': pile ? 1 : 0,
       });
     }

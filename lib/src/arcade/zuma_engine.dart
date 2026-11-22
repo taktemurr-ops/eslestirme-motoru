@@ -166,7 +166,7 @@ class ZumaSim extends ArcadeSim {
       }
     }
     // Deliğe ulaştı mı
-    if (balls.last.s >= level.length) {
+    if (balls.isNotEmpty && balls.last.s >= level.length) {
       if (meta.zen) {
         balls.removeLast();
       } else {
