@@ -218,7 +218,7 @@ class PairTilesKind extends MatchKind {
       final face = List.filled(pos.length, 0);
       final faces = mode == 2 ? 0 : math.min(order.length, 8 + d * 3);
       // Yüzleri sırayla dağıt (aynı yüz birkaç çifte gelebilir).
-      final pool = [for (var i = 0; i < order.length; i++) i % math.max(1, faces)];
+      final pool = <int>[for (var i = 0; i < order.length; i++) (i % math.max(1, faces)).toInt()];
       r.shuffle(pool);
       for (var k = 0; k < order.length; k++) {
         if (mode == 2) {
