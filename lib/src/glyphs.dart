@@ -1,5 +1,5 @@
 import 'dart:math' as math;
-import 'dart:ui';
+import 'package:flutter/material.dart';
 
 import 'core.dart';
 
@@ -218,15 +218,33 @@ void _poly(Path p, Offset c, double r, int n, double rot) {
 /// Simgeyi verilen kutuda çizer.
 void drawGlyph(Canvas c, int glyph, Rect r, Color color, {bool outline = false}) {
   final path = glyphPath(glyph, r);
-  c.drawPath(path, Paint()..color = color);
-  if (outline) {
-    c.drawPath(
-        path,
-        Paint()
-          ..color = const Color(0x55000000)
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = r.shortestSide * 0.04);
-  }
+  final a = color.a;
+  final s = r.shortestSide;
+  // Gölge, parlak cam/mücevher dolgu, üstte ışık yansıması, ince koyu kenar.
+  c.drawPath(path.shift(Offset(0, s * 0.05)), Paint()..color = Colors.black.withValues(alpha: 0.28 * a));
+  final hsl = HSLColor.fromColor(color.withValues(alpha: 1));
+  final light = hsl.withLightness((hsl.lightness + 0.2).clamp(0.0, 0.92)).toColor();
+  final dark = hsl.withLightness((hsl.lightness - 0.18).clamp(0.05, 1.0)).toColor();
+  c.drawPath(
+      path,
+      Paint()
+        ..shader = LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [light.withValues(alpha: a), color, dark.withValues(alpha: a)],
+          stops: const [0, 0.5, 1],
+        ).createShader(r));
+  c.save();
+  c.clipPath(path);
+  c.drawOval(Rect.fromLTWH(r.left + r.width * 0.12, r.top + r.height * 0.06, r.width * 0.5, r.height * 0.3),
+      Paint()..color = Colors.white.withValues(alpha: 0.32 * a));
+  c.restore();
+  c.drawPath(
+      path,
+      Paint()
+        ..color = (outline ? const Color(0x66000000) : dark.withValues(alpha: 0.55 * a))
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = s * (outline ? 0.05 : 0.03));
 }
 
 /// Kabartmalı taş. [depth] alt kenarın kalınlığı (katmanlı dizilimler).
@@ -239,7 +257,14 @@ void drawTile(Canvas c, Rect r, int face, MPalette p,
     c.drawRRect(RRect.fromRectAndRadius(r.translate(depth * 0.3, depth * 0.55), rad), Paint()..color = p.tileEdge.withAlpha(a));
   }
   final body = selected ? Color.lerp(p.tile, p.accent, 0.35)! : p.tile;
-  c.drawRRect(RRect.fromRectAndRadius(r, rad), Paint()..color = body.withAlpha(a));
+  c.drawRRect(
+      RRect.fromRectAndRadius(r, rad),
+      Paint()
+        ..shader = LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [Color.lerp(body, Colors.white, 0.25)!.withAlpha(a), body.withAlpha(a), Color.lerp(body, Colors.black, 0.08)!.withAlpha(a)],
+        ).createShader(r));
   c.drawRRect(
       RRect.fromRectAndRadius(r.deflate(r.shortestSide * 0.06), rad),
       Paint()
