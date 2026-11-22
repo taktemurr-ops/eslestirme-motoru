@@ -14,5 +14,6 @@ export 'src/arcade/zuma_paint.dart';
 export 'src/catalog.dart';
 export 'src/core.dart';
 export 'src/glyphs.dart';
+export 'src/kinds/misc.dart' show symbolCards;
 export 'src/texts.dart';
 export 'src/view.dart';

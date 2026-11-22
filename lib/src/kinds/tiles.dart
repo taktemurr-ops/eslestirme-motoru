@@ -227,8 +227,8 @@ class PairTilesKind extends MatchKind {
           final a1 = r.range(math.max(0, s1 - 6), math.min(6, s1));
           final s2 = 12 - s1;
           final a2 = r.range(math.max(0, s2 - 6), math.min(6, s2));
-          face[order[k][0]] = math.min(a1, s1 - a1) * 7 + math.max(a1, s1 - a1);
-          face[order[k][1]] = math.min(a2, s2 - a2) * 7 + math.max(a2, s2 - a2);
+          face[order[k][0]] = (math.min(a1, s1 - a1) * 7 + math.max(a1, s1 - a1)).toInt();
+          face[order[k][1]] = (math.min(a2, s2 - a2) * 7 + math.max(a2, s2 - a2)).toInt();
         } else {
           face[order[k][0]] = pool[k];
           face[order[k][1]] = pool[k];
