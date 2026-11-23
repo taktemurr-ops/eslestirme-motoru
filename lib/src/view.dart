@@ -217,7 +217,7 @@ class _MatchViewState extends State<MatchView> with SingleTickerProviderStateMix
           const SizedBox(width: 4),
           Text('${_seconds ~/ 60}:${(_seconds % 60).toString().padLeft(2, '0')}'),
           const SizedBox(width: 10),
-          Expanded(child: Text(g.status(lang), overflow: TextOverflow.ellipsis, textAlign: TextAlign.center, maxLines: 2)),
+          Expanded(child: FittedBox(fit: BoxFit.scaleDown, child: Text(g.status(lang), maxLines: 1, textAlign: TextAlign.center))),
           IconButton(tooltip: ctx.t('undo'), onPressed: _undo.isEmpty ? null : _doUndo, icon: const Icon(Icons.undo)),
           IconButton(tooltip: ctx.t('restart'), onPressed: _restart, icon: const Icon(Icons.restart_alt)),
           if (g.hintable) IconButton(tooltip: ctx.t('hint'), onPressed: _hint, icon: const Icon(Icons.lightbulb_outline)),

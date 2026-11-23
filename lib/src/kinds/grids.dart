@@ -14,7 +14,7 @@ class GridGeo {
   final int w, h;
   GridGeo(this.cs, this.ox, this.oy, this.w, this.h);
 
-  factory GridGeo.fit(int w, int h, Rect area, {double margin = 0, double maxCell = 90}) {
+  factory GridGeo.fit(int w, int h, Rect area, {double margin = 0, double maxCell = 130}) {
     final cs = math.min(maxCell, math.min((area.width - 12) / (w + margin * 2), (area.height - 12) / (h + margin * 2)));
     return GridGeo(cs, area.left + (area.width - cs * w) / 2, area.top + (area.height - cs * h) / 2, w, h);
   }

@@ -455,7 +455,10 @@ class PairTilesGame extends MGame {
           ..strokeWidth = r.width * 0.03);
     _pips(c, top, a, p.piece(a), alpha);
     _pips(c, bot, bb, p.piece(bb + 3), alpha);
-    drawText(c, '${a + bb}', r.bottomRight - Offset(r.width * 0.16, r.height * 0.1), r.width * 0.16, p.ink.withAlpha((150 * alpha).round()));
+    // Toplam, iki yarının ortasında küçük bir rozet (noktaların üstüne binmez).
+    final rad = r.width * 0.15;
+    c.drawCircle(r.center, rad, Paint()..color = p.ink.withAlpha((210 * alpha).round()));
+    drawText(c, '${a + bb}', r.center, rad * 1.15, const Color(0xFFFFFFFF).withAlpha((255 * alpha).round()));
   }
 
   static const _pipXY = {
