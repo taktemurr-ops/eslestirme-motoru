@@ -304,8 +304,8 @@ class LoopSim {
     belt = _li(d['belt']);
     hopper = _li(d['hop']);
     queues = _ll(d['q']);
-    cupColor = List.filled(stations.length, -1);
-    cupFill = List.filled(stations.length, 0);
+    cupColor = List.filled(stations.length, -1, growable: true);
+    cupFill = List.filled(stations.length, 0, growable: true);
     inlet = (d['in'] as num?)?.toInt() ?? 0;
   }
 
