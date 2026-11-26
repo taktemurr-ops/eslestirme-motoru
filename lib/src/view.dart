@@ -9,6 +9,7 @@ import 'package:studio_core/core/game_rules.dart';
 
 import 'core.dart';
 import 'texts.dart';
+import 'studio_chrome.dart';
 
 /// Bütün sıra tabanlı eşleştirme oyunları için ortak ekran.
 class MatchView extends StatefulWidget {
@@ -204,20 +205,34 @@ class _MatchViewState extends State<MatchView> with SingleTickerProviderStateMix
 
   @override
   Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
-    final lang = ctx.lang;
+    // Oyun alanı (taşlar, kutular) oyunun alışılmış temasıyla çizilir;
+    // üst bilgi çubuğu onaylı stüdyo temasıyla.
     final pal = _palette(context);
+    return StudioChrome(child: Builder(builder: (context) => _build(context, pal)));
+  }
+
+  Widget _build(BuildContext context, MPalette pal) {
+    final look = StudioLook.of(context);
+    final lang = ctx.lang;
     return Column(children: [
       Container(
-        margin: const EdgeInsets.fromLTRB(8, 4, 8, 0),
-        padding: const EdgeInsets.only(left: 10),
-        decoration: BoxDecoration(color: scheme.surface.withValues(alpha: 0.92), borderRadius: BorderRadius.circular(16)),
+        margin: const EdgeInsets.fromLTRB(8, 6, 8, 0),
+        padding: const EdgeInsetsDirectional.only(start: 8),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(18),
+          gradient: LinearGradient(colors: [look.sheet.withValues(alpha: 0.92), look.base.withValues(alpha: 0.92)]),
+          border: Border.all(color: look.accent.withValues(alpha: 0.45), width: 1.2),
+        ),
         child: Row(children: [
-          Icon(Icons.timer_outlined, size: 18, color: scheme.onSurface.withValues(alpha: 0.7)),
-          const SizedBox(width: 4),
-          Text('${_seconds ~/ 60}:${(_seconds % 60).toString().padLeft(2, '0')}'),
+          StudioTag(icon: Icons.timer_outlined, text: '${_seconds ~/ 60}:${(_seconds % 60).toString().padLeft(2, '0')}'),
           const SizedBox(width: 10),
-          Expanded(child: FittedBox(fit: BoxFit.scaleDown, child: Text(g.status(lang), maxLines: 1, textAlign: TextAlign.center))),
+          Expanded(
+              child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(g.status(lang),
+                      maxLines: 1,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(color: kStudioText, fontWeight: FontWeight.w800)))),
           IconButton(tooltip: ctx.t('undo'), onPressed: _undo.isEmpty ? null : _doUndo, icon: const Icon(Icons.undo)),
           IconButton(tooltip: ctx.t('restart'), onPressed: _restart, icon: const Icon(Icons.restart_alt)),
           if (g.hintable) IconButton(tooltip: ctx.t('hint'), onPressed: _hint, icon: const Icon(Icons.lightbulb_outline)),
