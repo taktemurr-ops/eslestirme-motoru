@@ -14,6 +14,8 @@ export 'src/arcade/zuma_paint.dart';
 export 'src/catalog.dart';
 export 'src/core.dart';
 export 'src/glyphs.dart';
+export 'src/kinds/flow.dart' show PixelFlowKind, ColorLoopKind, DessertTrayKind;
+export 'src/kinds/flow_sim.dart';
 export 'src/kinds/misc.dart' show symbolCards;
 export 'src/texts.dart';
 export 'src/view.dart';

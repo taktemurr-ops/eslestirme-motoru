@@ -1,4 +1,5 @@
 import 'core.dart';
+import 'kinds/flow.dart';
 import 'kinds/grids.dart';
 import 'kinds/match3.dart';
 import 'kinds/misc.dart';
@@ -28,6 +29,9 @@ final Map<String, MatchKind> kMatchKinds = {
   'ortak-sembol': const SymbolKind(),
   'farki-bul': const DiffKind(),
   'gizli-nesne': const HiddenKind(),
+  'piksel-akisi': const PixelFlowKind(),
+  'renk-dongusu': const ColorLoopKind(),
+  'tatli-tepsisi': const DessertTrayKind(),
   for (var i = 0; i < 10; i++) 'mahjong-dz-$i': PairTilesKind('mahjong-dz-$i', style: i),
 };
 

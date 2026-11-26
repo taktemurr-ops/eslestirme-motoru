@@ -21,6 +21,8 @@ const Map<String, String> _raw = {
   'find': 'Bul|Find|Finde|Encuentra|Trouve|ابحث عن|پیدا کن|מצאו|ڈھونڈیں|Найди|Знайди|Znajdź|Najdi|Găsește|Keresd|Βρες|Trova|Encontre|Zoek|Hitta|Find|Finn|Etsi|探す|찾기|寻找|ढूँढें|খোঁজো|Temukan|Cari|หา|Tìm|Hanapin',
   'time': 'Süre|Time|Zeit|Tiempo|Temps|الوقت|زمان|זמן|وقت|Время|Час|Czas|Čas|Timp|Idő|Χρόνος|Tempo|Tempo|Tijd|Tid|Tid|Tid|Aika|時間|시간|时间|समय|সময়|Waktu|Masa|เวลา|Thời gian|Oras',
   'next': 'Sıradaki|Next|Nächstes|Siguiente|Suivant|التالي|بعدی|הבא|اگلا|Следующий|Наступний|Następny|Další|Următorul|Következő|Επόμενο|Prossimo|Próximo|Volgende|Nästa|Næste|Neste|Seuraava|次|다음|下一个|अगला|পরের|Berikutnya|Seterusnya|ถัดไป|Tiếp theo|Susunod',
+  'pixels': 'Kalan piksel|Pixels left|Pixel übrig|Píxeles restantes|Pixels restants|البكسلات المتبقية|پیکسل‌های باقی|פיקסלים שנותרו|باقی پکسل|Осталось пикселей|Залишилось пікселів|Pozostałe piksele|Zbývající pixely|Pixeli rămași|Hátralévő pixelek|Εικονοστοιχεία που μένουν|Pixel rimasti|Píxeis restantes|Pixels over|Pixlar kvar|Pixels tilbage|Piksler igjen|Pikseleitä jäljellä|残りのピクセル|남은 픽셀|剩余像素|बचे पिक्सेल|বাকি পিক্সেল|Sisa piksel|Piksel berbaki|พิกเซลที่เหลือ|Điểm ảnh còn lại|Natitirang pixel',
+  'grains': 'Kalan tane|Grains left|Körner übrig|Granos restantes|Grains restants|الحبات المتبقية|دانه‌های باقی|גרגירים שנותרו|باقی دانے|Осталось крупинок|Залишилось крупинок|Pozostałe ziarna|Zbývající zrnka|Boabe rămase|Hátralévő szemek|Κόκκοι που μένουν|Granelli rimasti|Grãos restantes|Korrels over|Korn kvar|Korn tilbage|Korn igjen|Jyviä jäljellä|残りの粒|남은 알갱이|剩余颗粒|बचे दाने|বাকি দানা|Sisa butiran|Butiran berbaki|เม็ดที่เหลือ|Hạt còn lại|Natitirang butil',
 };
 
 final Map<String, List<String>> kMatchTexts = {
