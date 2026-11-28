@@ -547,11 +547,14 @@ class ShelfGame extends MGame {
   (Rect, List<Rect>) _shelf(int s) {
     final cols = n <= 4 ? 2 : 3;
     final rows = (n / cols).ceil();
-    final w = size.width / cols, h = size.height / rows;
+    final w = (size.width - 16) / cols, h = size.height / rows;
     final col = s % cols, row = s ~/ cols;
+    // Son satırda eksik raf varsa satır yatayda ortalanır.
+    final inRow = row == rows - 1 ? n - cols * row : cols;
+    final ox = 8 + (cols - inRow) * w / 2;
     // Raf, diliminde dikey ortalanır ve daha iri çizilir (Goods Sort tarzı).
     final bh = math.min(h * 0.7, w * 0.92 / 3 * 1.45);
-    final box = Rect.fromLTWH(col * w + w * 0.04, row * h + (h - bh) / 2, w * 0.92, bh);
+    final box = Rect.fromLTWH(ox + col * w + w * 0.04, row * h + (h - bh) / 2, w * 0.92, bh);
     final sw = box.width / 3;
     return (box, [for (var q = 0; q < 3; q++) Rect.fromLTWH(box.left + q * sw, box.top, sw, box.height)]);
   }
