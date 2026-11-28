@@ -4,6 +4,11 @@ on:
     branches: [main]
   pull_request:
   workflow_dispatch:
+    inputs:
+      ids:
+        description: "Görüntü alınacak türler (virgülle)"
+        required: false
+        default: ""
 permissions:
   contents: read
 concurrency:
@@ -39,7 +44,7 @@ jobs:
           channel: stable
           cache: true
       - run: flutter pub get
-      - run: flutter test test/shots/shots_test.dart --dart-define=SHOTS=true --dart-define=IDS=${{ github.event.inputs.ids || '' }} || true
+      - run: flutter test test/shots/shots_test.dart --dart-define=SHOTS=true --dart-define=IDS=${{ github.event.inputs.ids }} || true
       - name: Görüntüleri dala ekle
         run: |
           set -e

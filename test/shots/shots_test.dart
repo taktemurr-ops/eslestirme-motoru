@@ -108,11 +108,27 @@ const _games = {
   'domino': ('oyun-domino-eslestirme', Color(0xFF6B5B4B)),
   'onet': ('oyun-baglantili-eslestirme', Color(0xFF4F8A7B)),
   'cift-bul': ('oyun-cift-bul', Color(0xFFB0577E)),
+  'renk-doldurma': ('oyun-renk-doldurma', Color(0xFF3A86A8)),
+  'grup-patlatma': ('oyun-grup-patlatma', Color(0xFFD1495B)),
+  'altigen-esle': ('oyun-altigen-eslestirme', Color(0xFF2A9D8F)),
+  'samegame': ('oyun-blok-patlatma', Color(0xFF9C6644)),
+  'kart-siralama': ('oyun-kart-siralama', Color(0xFF6C584C)),
+  'iplik-siralama': ('oyun-iplik-yun-siralama', Color(0xFFC1666B)),
+  'urun-siralama': ('oyun-urun-siralama', Color(0xFFBC6C25)),
+  'uclu-birlestirme': ('oyun-uclu-birlestirme', Color(0xFF6A994E)),
+  'ortak-sembol': ('oyun-ortak-sembol-bulma', Color(0xFFE07A5F)),
+  'farki-bul': ('oyun-farki-bul', Color(0xFF8AB17D)),
+  'gizli-nesne': ('oyun-gizli-nesne', Color(0xFF7F5539)),
+  '3b-nesne': ('oyun-3b-nesne-eslestirme', Color(0xFFE09F3E)),
+  'piksel-akisi': ('oyun-piksel-akisi', Color(0xFF2B3550)),
+  'tatli-tepsisi': ('oyun-tatli-tepsisi', Color(0xFF8E5A3C)),
+  'renk-dongusu': ('oyun-renk-dongusu', Color(0xFF2E5D57)),
 };
+const _only = String.fromEnvironment('IDS');
 
 void main() {
   if (!_on) return;
-  for (final e in _games.entries) {
+  for (final e in _games.entries.where((e) => _only.isEmpty || _only.split(',').contains(e.key))) {
     testWidgets('shots ${e.key}', (t) async {
       await _fonts();
       for (final dev in const [('p', Size(393, 852)), ('t', Size(1280, 800))]) {
