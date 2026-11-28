@@ -198,7 +198,10 @@ class BinsGame extends MGame {
       final rowW = inRow * w;
       final x = (size.width - rowW) / 2 + col * w + (w - unit) / 2;
       final hh = unit * (cap[i] + 0.6);
-      final yBase = size.height / rowsN * (row + 1) - 16;
+      // Satır, kendi diliminde dikey ortalanır (eskiden alta yaslıydı ve
+      // telefonda üstte büyük boşluk kalıyordu).
+      final slotH = size.height / rowsN;
+      final yBase = slotH * row + (slotH + unit * (maxCap + 0.6)) / 2;
       out.add(Rect.fromLTWH(x, yBase - hh, unit, hh));
     }
     return out;
