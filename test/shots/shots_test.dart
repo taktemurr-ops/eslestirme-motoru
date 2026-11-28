@@ -26,6 +26,15 @@ Future<void> _fonts() async {
     roboto.addFont(Future.value(f.readAsBytesSync().buffer.asByteData()));
   }
   await roboto.load();
+  // Tuvale yazılan metinler (TextPainter, aile belirtilmemiş) test motorunun
+  // varsayılan ailesini kullanır: onu da gerçek yazı tipiyle doldur.
+  for (final fam in const ['FlutterTest', 'Ahem']) {
+    final l = FontLoader(fam);
+    for (final f in files.where((f) => f.path.contains('Roboto-Regular') || f.path.contains('Roboto-Bold'))) {
+      l.addFont(Future.value(f.readAsBytesSync().buffer.asByteData()));
+    }
+    await l.load();
+  }
   final icons = FontLoader('MaterialIcons');
   for (final f in files.where((f) => f.path.contains('MaterialIcons'))) {
     icons.addFont(Future.value(f.readAsBytesSync().buffer.asByteData()));
