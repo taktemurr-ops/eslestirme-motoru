@@ -2,6 +2,8 @@
 // eşleştirmeler yapar; çift kalmayınca "devam" (karıştır) her zaman oyunu
 // yeniden oynanır kılmalı ve sonunda tahta temizlenebilmeli.
 import 'package:eslestirme_motoru/eslestirme_motoru.dart';
+// ignore: implementation_imports
+import 'package:eslestirme_motoru/src/kinds/tiles.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:studio_core/core/level_plan.dart';
 import 'package:studio_core/core/rng.dart';
