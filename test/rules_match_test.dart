@@ -28,10 +28,17 @@ void main() {
             }
           }
           if (pairs.isEmpty) {
+            final before = g.save();
             expect(g.lost, isTrue, reason: '$id L$l: çift yok ama kayıp değil');
             expect(g.continueAfterLoss(), isTrue, reason: '$id L$l karıştır başarısız');
             shuffles++;
             expect(g.lost, isFalse, reason: '$id L$l karıştırdıktan sonra hâlâ çift yok');
+            // kayıt/geri al dizilimi doğru taşır
+            final after = g.save();
+            final g2 = rules.kindForLevel(MatchRules.campaignDifficulty(gl.spec)).start(gl.puzzle) as PairTilesGame..load(after);
+            expect(g2.save().toString(), after.toString());
+            g2.load(before);
+            expect(g2.b.freeTiles().toString(), (rules.kindForLevel(MatchRules.campaignDifficulty(gl.spec)).start(gl.puzzle)..load(before) as PairTilesGame).b.freeTiles().toString());
             continue;
           }
           expect(g.lost, isFalse);

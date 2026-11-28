@@ -384,7 +384,34 @@ class PairTilesGame extends MGame {
       hintTiles = [];
       return true;
     }
-    return false;
+    // Kalan taşların dizilimi çift çift açılamıyor (ör. üst üste iki taş):
+    // karıştırmak tek başına çözmez. Taşları tek katta sıralara diz; her
+    // sıranın uçları serbest olduğundan tahta her zaman bitirilebilir.
+    // (QA: Domino'da rastgele oyunda "devam" başarısız kalıyordu.)
+    return _flatten(alive, r);
+  }
+
+  /// Taşlar tek katta yeniden dizildi mi (kayıtta saklanır).
+  bool flattened = false;
+
+  bool _flatten(List<int> alive, SeededRandom r) {
+    final cols = math.max(2, math.min(8, (alive.length / 2).ceil()));
+    for (var k = 0; k < alive.length; k++) {
+      b.pos[alive[k]] = Pos((k % cols) * 2, (k ~/ cols) * 2, 0);
+    }
+    final sub = [for (final i in alive) b.pos[i]];
+    final order = removalOrder(sub, true, 2, r);
+    final pairs = _pairUp([for (final i in alive) b.face[i]], r);
+    if (order == null || pairs == null) return false;
+    r.shuffle(pairs);
+    for (var k = 0; k < order.length && k < pairs.length; k++) {
+      b.face[alive[order[k][0]]] = pairs[k].$1;
+      b.face[alive[order[k][1]]] = pairs[k].$2;
+    }
+    flattened = true;
+    sel = null;
+    hintTiles = [];
+    return true;
   }
 
   List<(int, int)>? _pairUp(List<int> faces, SeededRandom r) {
@@ -512,7 +539,14 @@ class PairTilesGame extends MGame {
   }
 
   @override
-  Map<String, Object?> save() => {'g': [for (var i = 0; i < b.gone.length; i++) if (b.gone[i]) i], 'f': List.of(b.face), 'm': moves, 's': score, 'sh': shuffles};
+  Map<String, Object?> save() => {
+        'g': [for (var i = 0; i < b.gone.length; i++) if (b.gone[i]) i],
+        'f': List.of(b.face),
+        'm': moves,
+        's': score,
+        'sh': shuffles,
+        if (flattened) 'p': [for (final p in b.pos) ...[p.x, p.y, p.z]],
+      };
 
   @override
   void load(Map<String, Object?> j) {
@@ -529,6 +563,20 @@ class PairTilesGame extends MGame {
     moves = (j['m'] as num).toInt();
     score = (j['s'] as num).toInt();
     shuffles = (j['sh'] as num?)?.toInt() ?? 0;
+    final ps = j['p'] as List?;
+    if (ps != null && ps.length == b.pos.length * 3) {
+      for (var i = 0; i < b.pos.length; i++) {
+        b.pos[i] = Pos((ps[i * 3] as num).toInt(), (ps[i * 3 + 1] as num).toInt(), (ps[i * 3 + 2] as num).toInt());
+      }
+      flattened = true;
+    } else if (flattened) {
+      // Düzleştirmeden önceki bir kayda (geri al) dönüldü: özgün dizilim.
+      final xs = lv.ints('x'), ys = lv.ints('y'), zs = lv.ints('z');
+      for (var i = 0; i < b.pos.length; i++) {
+        b.pos[i] = Pos(xs[i], ys[i], zs[i]);
+      }
+      flattened = false;
+    }
     sel = null;
     hintTiles = [];
     _fx.clear();
