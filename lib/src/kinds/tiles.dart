@@ -446,7 +446,8 @@ class PairTilesGame extends MGame {
   ];
 
   MPalette _mahjongPalette(MPalette p) {
-    final back = style >= 0 ? _backs[(style + 1) % _backs.length] : _backs[0];
+    final dz = lv.kind.startsWith('mahjong-dz-') ? int.tryParse(lv.kind.substring(11)) : null;
+    final back = dz != null ? _backs[(dz + 1) % _backs.length] : _backs[0];
     return MPalette(
       pieces: p.pieces,
       ink: p.ink,
