@@ -8,6 +8,7 @@ import 'package:studio_core/app/services/audio.dart';
 import 'package:studio_core/core/game_rules.dart';
 
 import 'core.dart';
+import 'glyphs.dart';
 import 'texts.dart';
 import 'studio_chrome.dart';
 
@@ -195,8 +196,9 @@ class _MatchViewState extends State<MatchView> with SingleTickerProviderStateMix
       ink: s.onSurface,
       surface: s.surface,
       accent: s.primary,
-      tile: const Color(0xFFFBF6EC),
-      tileEdge: const Color(0xFFD9CBB2),
+      // Taş/kart yüzü ve kenarı oyunun kendi rengine doğru hafifçe tonlanır.
+      tile: Color.lerp(const Color(0xFFFBF6EC), s.primary, 0.05)!,
+      tileEdge: Color.lerp(const Color(0xFFD9CBB2), s.primary, 0.30)!,
       shadow: const Color(0xFF000000),
       colorBlind: ctx.colorBlind,
       reducedMotion: ctx.reducedMotion,
@@ -252,7 +254,7 @@ class _MatchViewState extends State<MatchView> with SingleTickerProviderStateMix
             onPanUpdate: (d) => _input(() => g.move(d.localPosition)),
             onPanEnd: (d) => _input(() => g.up(Offset.infinite)),
             onPanCancel: () => _input(() => g.up(Offset.infinite)),
-            child: CustomPaint(size: size, painter: _Painter(g, pal, _t)),
+            child: CustomPaint(size: size, painter: _Painter(g, pal, _t, widget.rules.gameId)),
           );
         }),
       ),
@@ -264,10 +266,51 @@ class _Painter extends CustomPainter {
   final MGame g;
   final MPalette p;
   final double t;
-  _Painter(this.g, this.p, this.t);
+  final String gameId;
+  _Painter(this.g, this.p, this.t, this.gameId);
 
   @override
-  void paint(Canvas canvas, Size size) => g.paint(canvas, size, p, t);
+  void paint(Canvas canvas, Size size) {
+    _backdrop(canvas, size);
+    g.paint(canvas, size, p, t);
+  }
+
+  /// Oyuna özgü sahne: oyunun renginde yumuşak ışık ve oyunun motifinden
+  /// silik desen (aynı motoru kullanan oyunlar böylece ayrışır).
+  void _backdrop(Canvas c, Size size) {
+    final rect = Offset.zero & size;
+    c.drawRect(
+        rect,
+        Paint()
+          ..shader = RadialGradient(
+            center: const Alignment(0, -0.15),
+            radius: 0.95,
+            colors: [p.accent.withValues(alpha: 0.22), p.accent.withValues(alpha: 0.0)],
+          ).createShader(rect));
+    var h = 0x811C9DC5;
+    for (final u in gameId.codeUnits) {
+      h = ((h ^ u) * 0x01000193) & 0x7FFFFFFF;
+    }
+    final motif = h % kGlyphCount;
+    final step = math.max(56.0, size.shortestSide / 6);
+    final paint = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.4
+      ..color = Colors.white.withValues(alpha: 0.06);
+    var row = 0;
+    for (var y = step * 0.5; y < size.height; y += step) {
+      for (var x = (row.isOdd ? step : step * 0.5); x < size.width; x += step) {
+        final r = Rect.fromCenter(center: Offset(x, y), width: step * 0.34, height: step * 0.34);
+        c.save();
+        c.translate(r.center.dx, r.center.dy);
+        c.rotate(((h >> 3) % 7 - 3) * 0.12 + row * 0.2);
+        c.translate(-r.center.dx, -r.center.dy);
+        c.drawPath(glyphPath(motif, r), paint);
+        c.restore();
+      }
+      row++;
+    }
+  }
 
   @override
   bool shouldRepaint(covariant _Painter old) => true;

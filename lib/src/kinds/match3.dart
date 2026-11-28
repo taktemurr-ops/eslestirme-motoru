@@ -443,7 +443,13 @@ class Match3Game extends MGame {
     final geo = _geo;
     for (var i = 0; i < c.length; i++) {
       final r = geo.cell(i);
-      cv.drawRect(r, Paint()..color = (i % w + i ~/ w).isEven ? const Color(0x22FFFFFF) : const Color(0x11000000));
+      if (timed) {
+        // Mücevher: koyu kadife yuvalar
+        cv.drawRRect(RRect.fromRectAndRadius(r.deflate(1), Radius.circular(r.width * 0.12)),
+            Paint()..color = (i % w + i ~/ w).isEven ? const Color(0x55301A40) : const Color(0x66200F2E));
+      } else {
+        cv.drawRect(r, Paint()..color = (i % w + i ~/ w).isEven ? const Color(0x22FFFFFF) : const Color(0x11000000));
+      }
       if (jelly[i] == 1) {
         cv.drawRRect(RRect.fromRectAndRadius(r.deflate(1.5), Radius.circular(r.width * 0.18)), Paint()..color = const Color(0xAAB7E4F7));
       }
@@ -457,7 +463,8 @@ class Match3Game extends MGame {
 
   /// Taş: renge göre farklı kesimli mücevher şekli.
   void _gem(Canvas cv, Rect r, int col, int special, MPalette p, {bool hint = false}) {
-    final shapes = [0, 3, 13, 2, 4, 5];
+    // Mücevher Değiştirme kesik taşlar, Üçlü Eşleştirme yuvarlak şekerler kullanır.
+    final shapes = timed ? const [3, 6, 1, 7, 4, 13] : const [0, 3, 13, 2, 4, 5];
     final inner = r.deflate(r.width * 0.12);
     if (special == 3) {
       for (var k = 0; k < 6; k++) {

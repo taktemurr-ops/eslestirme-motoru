@@ -7,6 +7,7 @@ import 'package:studio_core/core/missions.dart';
 
 import '../core.dart';
 import '../glyphs.dart';
+import '../mahjong_faces.dart';
 import '../texts.dart';
 
 /// Katmanlı taş dizilimleri: mahjong solitaire, büyük taşlı tek kat,
@@ -437,8 +438,39 @@ class PairTilesGame extends MGame {
     }
   }
 
+  /// Mahjong taşlarının sırt/kenar rengi: dizilim çeşidine göre (yeşim,
+  /// lal, lacivert, kehribar...). Her Mahjong oyunu kendi taş takımını taşır.
+  static const _backs = [
+    Color(0xFF2E7D5B), Color(0xFFA23B3B), Color(0xFF27477A), Color(0xFFB7791F), Color(0xFF1F7A7A),
+    Color(0xFF6B3E7A), Color(0xFF4F6B2E), Color(0xFF8A4B2A), Color(0xFF34495E), Color(0xFFB04A6A), Color(0xFF3E6E8E),
+  ];
+
+  MPalette _mahjongPalette(MPalette p) {
+    final back = style >= 0 ? _backs[(style + 1) % _backs.length] : _backs[0];
+    return MPalette(
+      pieces: p.pieces,
+      ink: p.ink,
+      surface: p.surface,
+      accent: p.accent,
+      tile: const Color(0xFFF8F3E3),
+      tileEdge: back,
+      shadow: p.shadow,
+      colorBlind: p.colorBlind,
+      reducedMotion: p.reducedMotion,
+    );
+  }
+
   void _tile(Canvas c, Rect r, int face, MPalette p, bool sel, bool dim, bool hint, double depth, double alpha) {
-    if (mode == 2) {
+    if (mode == 0) {
+      final mp = _mahjongPalette(p);
+      drawTile(c, r, -1, mp, selected: sel, dim: false, hint: hint, depth: depth, alpha: alpha);
+      drawMahjongFace(c, r, face, mp, alpha);
+      if (dim) {
+        // Kilitli taş: soluk (yüz yine okunur, Mahjong Solitaire alışkanlığı).
+        c.drawRRect(RRect.fromRectAndRadius(r, Radius.circular(r.shortestSide * 0.16)),
+            Paint()..color = const Color(0x55000000).withValues(alpha: 0.33 * alpha));
+      }
+    } else if (mode == 2) {
       drawTile(c, r, -1, p, selected: sel, dim: dim, hint: hint, depth: depth, alpha: alpha);
       _domino(c, r, face, p, alpha);
     } else {
