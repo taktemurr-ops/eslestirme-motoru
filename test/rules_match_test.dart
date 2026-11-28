@@ -38,7 +38,8 @@ void main() {
             final g2 = rules.kindForLevel(MatchRules.campaignDifficulty(gl.spec)).start(gl.puzzle) as PairTilesGame..load(after);
             expect(g2.save().toString(), after.toString());
             g2.load(before);
-            expect(g2.b.freeTiles().toString(), (rules.kindForLevel(MatchRules.campaignDifficulty(gl.spec)).start(gl.puzzle)..load(before) as PairTilesGame).b.freeTiles().toString());
+            final g3 = rules.kindForLevel(MatchRules.campaignDifficulty(gl.spec)).start(gl.puzzle) as PairTilesGame..load(before);
+            expect(g2.b.freeTiles().toString(), g3.b.freeTiles().toString());
             continue;
           }
           expect(g.lost, isFalse);
