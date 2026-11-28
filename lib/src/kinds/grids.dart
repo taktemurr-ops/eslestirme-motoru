@@ -897,7 +897,7 @@ class FloodGame extends MGame {
   }
 
   double get _btn => math.min(64.0, size.width / (k + 1));
-  GridGeo get _geo => GridGeo.fit(n, n, Rect.fromLTWH(0, 0, size.width, size.height - _btn * 1.5));
+  GridGeo get _geo => GridGeo.fit(n, n, Rect.fromLTWH(12, 8, size.width - 24, size.height - _btn * 1.5 - 16));
   Rect _button(int col) {
     final b = _btn;
     final total = b * k;

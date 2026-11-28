@@ -189,7 +189,7 @@ class BinsGame extends MGame {
     final perRow = n <= 6 ? n : (n / 2).ceil();
     final rowsN = (n / perRow).ceil();
     final maxCap = cap.reduce(math.max);
-    final w = size.width / perRow;
+    final w = (size.width - 24) / perRow;
     final unit = math.min(w * 0.7, (size.height / rowsN - 30) / (maxCap + 0.8));
     final out = <Rect>[];
     for (var i = 0; i < n; i++) {
@@ -549,7 +549,9 @@ class ShelfGame extends MGame {
     final rows = (n / cols).ceil();
     final w = size.width / cols, h = size.height / rows;
     final col = s % cols, row = s ~/ cols;
-    final box = Rect.fromLTWH(col * w + w * 0.06, row * h + h * 0.18, w * 0.88, math.min(h * 0.62, w * 0.88 / 3 * 1.2));
+    // Raf, diliminde dikey ortalanır ve daha iri çizilir (Goods Sort tarzı).
+    final bh = math.min(h * 0.7, w * 0.92 / 3 * 1.45);
+    final box = Rect.fromLTWH(col * w + w * 0.04, row * h + (h - bh) / 2, w * 0.92, bh);
     final sw = box.width / 3;
     return (box, [for (var q = 0; q < 3; q++) Rect.fromLTWH(box.left + q * sw, box.top, sw, box.height)]);
   }
