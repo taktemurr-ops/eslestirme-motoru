@@ -42,7 +42,7 @@ class _MatchViewState extends State<MatchView> with SingleTickerProviderStateMix
   void initState() {
     super.initState();
     final lv = (ctx.generated as GeneratedLevel<MLevel>).puzzle;
-    g = widget.rules.kindForLevel(ctx.spec.difficulty).start(lv);
+    g = widget.rules.kindForLevel(MatchRules.campaignDifficulty(ctx.spec)).start(lv);
     _start = g.save();
     final snap = ctx.resume['snap'];
     if (snap is Map) {

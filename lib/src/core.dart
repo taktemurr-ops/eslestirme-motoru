@@ -150,9 +150,20 @@ class MatchRules extends GameRules<MLevel> {
   @override
   List<MissionTemplate> get missionTemplates => kindFor(5).missions;
 
+  /// Kampanyanın ilk bölümleri: bölüm planı ilk 20 bölümü en kolayda tutar;
+  /// piyasadaki sıralama/Mahjong/üçlü eşleştirme oyunlarında 4-5. bölümde
+  /// zorluk belirgin artar. Taban: 1. bölüm 1, 2-3. bölüm 2, sonrası en az 3.
+  static int campaignDifficulty(LevelSpec spec) {
+    final d = spec.difficulty;
+    if (spec.mode != GameModeId.campaign) return d;
+    final l = spec.levelId;
+    final floor = l <= 1 ? 1 : (l <= 3 ? 2 : 3);
+    return d < floor ? floor : d;
+  }
+
   @override
   MLevel generate(LevelSpec spec) {
-    final d = mapDifficulty(spec.difficulty);
+    final d = mapDifficulty(campaignDifficulty(spec));
     final k = kindFor(d);
     try {
       return k.make(d, SeededRandom(mixSeed([spec.seed, 6173])));
@@ -164,7 +175,7 @@ class MatchRules extends GameRules<MLevel> {
 
   @override
   Validation validate(MLevel puzzle, LevelSpec spec) {
-    final k = kindFor(mapDifficulty(spec.difficulty));
+    final k = kindFor(mapDifficulty(campaignDifficulty(spec)));
     if (k.id != puzzle.kind) return const Validation.fail('kind mismatch');
     return k.solvable(puzzle) ? const Validation.ok() : const Validation.fail('not solvable');
   }
